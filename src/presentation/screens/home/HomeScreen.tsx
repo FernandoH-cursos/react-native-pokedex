@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, View} from 'react-native';
-import { Text } from 'react-native-paper';
+import { FAB, Text, useTheme } from 'react-native-paper';
 
 import { usePokemonsInfinite } from '../../hooks/usePokemonsInfinite';
 
@@ -8,14 +8,18 @@ import { PokemonCard } from '../../components/pokemons/PokemonCard';
 
 import { globalTheme } from '../../../config/theme/global-theme';
 
+import { RootStackParams } from '../../navigator/StackNavigator';
+import { StackScreenProps } from '@react-navigation/stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+interface Props extends StackScreenProps<RootStackParams,'HomeScreen'>{}
 
-export const HomeScreen = () => {
+export const HomeScreen = ({navigation}: Props) => {
   //* Para moviles con notch (pantalla con muesca o agujero en el top)
-  const {top } = useSafeAreaInsets();
+  const {top} = useSafeAreaInsets();
+  const theme = useTheme();
 
-  const { queryPokemons,pokemons} = usePokemonsInfinite();
+  const {queryPokemons, pokemons} = usePokemonsInfinite();
 
   return (
     <View style={globalTheme.globalMargin}>
@@ -37,6 +41,23 @@ export const HomeScreen = () => {
         //* Quita el scroll vertical del FlatList
         showsVerticalScrollIndicator={false}
         style={{paddingTop: top + 20}}
+      />
+
+      {/*
+        Botón flotante de react paper:
+        - label: Texto que aparece en el botón
+        - style: Estilo del botón
+        - mode: Tipo de botón, 'elevated' es un botón con sombra
+        - color: Color del texto del botón
+        - onPress: Función que se ejecuta al presionar el botón
+      */}
+      <FAB
+        label="Buscar"
+        style={[globalTheme.fab, {backgroundColor: theme.colors.primary}]}
+        mode="elevated"
+        color={theme.dark ? 'black' : 'white'}
+        //* Redirige a la pantalla de búsqueda de pokemones
+        onPress={() => navigation.push('SearchScreen')}
       />
     </View>
   );

@@ -10,7 +10,7 @@ export const usePokemonsInfinite = () => {
     initialPageParam: 0,
     staleTime: 1000 * 60 * 60, // 1 hour
     //* Ejecuta el siguiente endpoint al llegar al final de la lista
-    queryFn: async params => {
+    queryFn: async (params) => {
       //* 'params.pageParam' es el nro de la página que se está cargando
       const pokemons = await getPokemons(params.pageParam);
 
